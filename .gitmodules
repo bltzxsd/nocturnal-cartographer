@@ -1,0 +1,3 @@
+[submodule "cartography-core"]
+	path = cartography-core
+	url = https://github.com/bltzxsd/cartography-core.git
