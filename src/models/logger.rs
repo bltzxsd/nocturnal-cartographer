@@ -59,14 +59,16 @@ impl TextParams {
 }
 
 impl Log {
+    const WIDTH: f32 = 400.0;
+    const HEIGHT: f32 = 88.0;
     /// Creates a new [`Log`] instance.
     pub fn new(params: TextParams, ctx: &impl Has<GraphicsContext>) -> Result<Log> {
         let mut builder = graphics::MeshBuilder::new();
         builder.rectangle(
             graphics::DrawMode::stroke(params.stroke_width),
             graphics::Rect {
-                w: 400.0,
-                h: 88.0,
+                w: Self::WIDTH,
+                h: Self::HEIGHT,
                 ..Default::default()
             },
             graphics::Color::from(*params.color()),
