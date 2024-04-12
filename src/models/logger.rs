@@ -130,6 +130,8 @@ impl Log {
 
     /// Increments the log's offset by one, if
     /// - the offset is less than the number of log messages.
+    ///
+    /// the offset cannot be increased past the length of the text vector
     pub fn incr_offset(&mut self) {
         if self.offset < self.text.len() {
             self.offset += 1;
@@ -137,11 +139,12 @@ impl Log {
     }
 
     /// Decrements the log's `offset` by one, if:
-    /// - the `offset` is greater than 0
-    /// - **AND** the number of log messages is greater than 5
-    /// - **OR**  the `offset` is less than or equal to 5.
+    /// - the `offset` is greater than 0 and the number of log messages is greater than 5
+    /// **OR**
+    /// - the `offset` is less than or equal to 5.
     ///
-    /// This allows the `offset` to be
+    /// This allows the `offset` to be decremented only when number of elements
+    /// exceed the amount of elements to be shown (five at a time.)
     pub fn decr_offset(&mut self) {
         let len = self.text.len();
         if (len > 5 && self.offset == 5) || (self.text.len() <= 5 && self.offset <= 5) {
