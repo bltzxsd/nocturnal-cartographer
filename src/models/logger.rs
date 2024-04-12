@@ -116,7 +116,8 @@ impl Log {
 
     /// Adds a new message to the log
     ///
-    /// Adding a new message will reset the log `offset` to be max.
+    /// Adding a new message will reset the log `offset` to be max,
+    /// causing a jump to the top of the log.
     pub fn push(&mut self, s: String) {
         self.text.push(s);
         self.offset = self.text.len();
