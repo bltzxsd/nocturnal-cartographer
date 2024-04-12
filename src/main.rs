@@ -6,9 +6,7 @@ use cartography_core::{colors, seed};
 use ggez::{
     conf::{WindowMode, WindowSetup},
     event::{self, EventHandler},
-    graphics,
-    input::keyboard::KeyCode,
-    Context, GameResult,
+    graphics, Context, GameResult,
 };
 use models::logger::{Log, TextParams};
 
@@ -83,17 +81,28 @@ impl EventHandler for Cartographer {
 
     fn key_down_event(
         &mut self,
-        _ctx: &mut Context,
+        ctx: &mut Context,
         input: ggez::input::keyboard::KeyInput,
         _repeated: bool,
     ) -> Result<(), ggez::GameError> {
+        use ggez::input::keyboard::{KeyCode, KeyMods};
         match input.keycode {
             Some(KeyCode::S) => self.log.decr_offset(),
             Some(KeyCode::W) => self.log.incr_offset(),
-            Some(KeyCode::N) => {
+            Some(KeyCode::A) => {
                 self.log
                     .push(format!("Pushed String No: {}", self.counter + 1));
                 self.counter += 1;
+            }
+            Some(KeyCode::N) => {
+                self.palette = colors::Palette::random(self.seed.deref_mut(), 1.0, 1.0);
+                self.log.color_mut(ctx, *self.palette.fg())?;
+            }
+            Some(KeyCode::C) => {
+                if input.mods.contains(KeyMods::CTRL) {
+                    println!("terminating!");
+                    ctx.request_quit();
+                }
             }
             _ => (),
         }
