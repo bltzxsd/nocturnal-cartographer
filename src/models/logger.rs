@@ -56,6 +56,13 @@ impl TextParams {
     pub fn color(&self) -> &[f32; 4] {
         &self.color
     }
+
+    /// Change the color of the text.
+    /// params:
+    /// new: [r, g, b, a]
+    pub fn color_mut(&mut self, color: [f32; 4]) {
+        self.color = color;
+    }
 }
 
 impl Log {
@@ -151,5 +158,28 @@ impl Log {
         } else if self.offset > 0 {
             self.offset -= 1;
         }
+    }
+
+    /// Changes the color for the log.
+    ///
+    /// This requires re-creation of the mesh with the given colors.
+    /// params
+    /// - color: [r, g, b, a]
+    pub fn color_mut(&mut self, ctx: &impl Has<GraphicsContext>, color: [f32; 4]) -> Result<()> {
+        let mut builder = graphics::MeshBuilder::new();
+        self.text_params.color_mut(color);
+        let params = &self.text_params;
+        builder.rectangle(
+            graphics::DrawMode::stroke(params.stroke_width),
+            graphics::Rect {
+                w: Self::WIDTH,
+                h: Self::HEIGHT,
+                ..Default::default()
+            },
+            graphics::Color::from(*params.color()),
+        )?;
+        let mesh = Mesh::from_data(ctx, builder.build());
+        self.mesh = mesh;
+        Ok(())
     }
 }
