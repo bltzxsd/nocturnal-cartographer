@@ -148,7 +148,6 @@ impl Log {
     pub fn decr_offset(&mut self) {
         let len = self.text.len();
         if (len > 5 && self.offset == 5) || (self.text.len() <= 5 && self.offset <= 5) {
-            return;
         } else if self.offset > 0 {
             self.offset -= 1;
         }
